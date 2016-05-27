@@ -18,9 +18,9 @@ h1 {
     font-size: 1.8em;
     padding-left: 8px;
     margin: 0 0 0 -2px;
-    color: #666666;
+    color: rgb(57,121,59);
     text-align: center;
-    background-color: #F0F0FF;
+    background-color: rgb(141,198,63);
     border-bottom: 1px solid darkgray;
     border-right: 1px solid darkgray;
 }
@@ -65,7 +65,7 @@ pre.wrap {
 }
 
 a {
-    color: #0066cc;
+    color: rgb(57,121,59);
 }
 
 .misoicon {
@@ -222,7 +222,7 @@ table.list tbody td {
 }
 
 table.list tbody tr.odd td {
-    background-color: #F0F0F6;
+    background-color: rgb(141,198,63);
 }
 
 table.list thead tr .headerSortUp {
@@ -419,7 +419,7 @@ table.containerSummary td.partitionOccupied {
     /*width: 220px;
     background: url(images/green_vr.gif) repeat-y right;
     */
-    background-color: #F0F0FF;
+    background-color: rgb(141,198,63);
     border-bottom: 1px solid darkgray;
     border-left: 1px solid lightgray;
     border-right: 1px solid darkgray;
@@ -650,7 +650,7 @@ div.checklist {
 }
 
 .widget_title {
-    background-color: #F0F0FF;
+    background-color: rgb(141,198,63);
     border: 1px solid lightgray;
     border-bottom: 0px;
     padding-top: 5px;
@@ -664,7 +664,7 @@ div.checklist {
     width: 320px;
     height: 30px;
     text-align: center;
-    color: #666666;
+    color: rgb(57,121,59);
     font-size: 1.4em;
     font-weight: bold;
 }
