@@ -187,10 +187,10 @@
   <!-- SVN connection -->
   <scm>
     <connection>
-      scm:git:https://www.github.com/TGAC/miso-lims
+      scm:git:https://github.com/TGAC/miso-lims
     </connection>
     <developerConnection>
-      scm:git:ssh://www.github.com/TGAC/miso-lims
+      scm:git:git@github.com:TGAC/miso-lims
     </developerConnection>
     <url>
       http://www.github.com/TGAC/miso-lims
@@ -376,12 +376,15 @@
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.5</version>
         <configuration>
           <includes>
             <include>**/*Suite.java</include>
           </includes>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
       </plugin>
 
       <!-- <plugin> <groupId>com.atlassian.maven.plugins</groupId> <artifactId>maven-clover2-plugin</artifactId>
