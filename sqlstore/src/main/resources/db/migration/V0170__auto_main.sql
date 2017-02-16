@@ -464,14 +464,24 @@ ALTER TABLE BoxPosition ADD COLUMN targetType varchar(50) NOT NULL;
 ALTER TABLE BoxPosition ADD COLUMN position varchar(3) NOT NULL;
 -- StartNoTest
 ALTER TABLE BoxPosition CHANGE COLUMN targetId targetId bigint(20);
-ALTER TABLE BoxPosition CHANGE COLUMN targetType targetType varchar(1);
+ALTER TABLE BoxPosition CHANGE COLUMN targetType targetType varchar(50);
 ALTER TABLE BoxPosition CHANGE COLUMN position position varchar(3);
 UPDATE BoxPosition SET
   position = CONCAT(CHAR(65 + `column`), LPAD(row + 1, 2, '0')),
   targetType = (
-    SELECT 'S' FROM Sample WHERE Sample.boxPositionId = BoxPosition.boxPositionId UNION
-    SELECT 'L' FROM Library WHERE Library.boxPositionId = BoxPosition.boxPositionId UNION
-    SELECT 'P' FROM Pool WHERE Pool.boxPositionId = BoxPosition.boxPositionId),
+    SELECT CONCAT('Sample',
+      CASE
+        WHEN EXISTS(SELECT * FROM SampleAliquot WHERE SampleAliquot.sampleId = Sample.sampleId) THEN 'Aliquot'
+        WHEN EXISTS(SELECT * FROM Identity WHERE Identity.sampleId = Sample.sampleId) THEN 'Identity'
+        WHEN EXISTS(SELECT * FROM SampleStock WHERE SampleStock.sampleId = Sample.sampleId) THEN 'Stock'
+        WHEN EXISTS(SELECT * FROM SampleTissue WHERE SampleTissue.sampleId = Sample.sampleId) THEN 'Tissue'
+        WHEN EXISTS(SELECT * FROM SampleCVSlide WHERE SampleCVSlide.sampleId = Sample.sampleId) THEN 'CV'
+        WHEN EXISTS(SELECT * FROM SampleLCMTube WHERE SampleLCMTube.sampleId = Sample.sampleId) THEN 'LCM'
+        WHEN EXISTS(SELECT * FROM SampleTissueProcessing WHERE SampleTissueProcessing.sampleId = Sample.sampleId) THEN 'Processing'
+        ELSE ''
+      END) FROM Sample WHERE Sample.boxPositionId = BoxPosition.boxPositionId UNION
+    SELECT CONCAT('Library', CASE WHEN EXISTS(SELECT * FROM LibraryAdditionalInfo WHERE LibraryAdditionalInfo.libraryId = Library.libraryId) THEN 'Detailed' ELSE '' END) FROM Library WHERE Library.boxPositionId = BoxPosition.boxPositionId UNION
+    SELECT 'Pool' FROM Pool WHERE Pool.boxPositionId = BoxPosition.boxPositionId),
   targetId = (
     SELECT sampleId FROM Sample WHERE Sample.boxPositionId = BoxPosition.boxPositionId UNION
     SELECT libraryId FROM Library WHERE Library.boxPositionId = BoxPosition.boxPositionId UNION
@@ -479,7 +489,7 @@ UPDATE BoxPosition SET
 -- EndNoTest
 
 ALTER TABLE BoxPosition CHANGE COLUMN targetId targetId bigint(20) NOT NULL;
-ALTER TABLE BoxPosition CHANGE COLUMN targetType targetType varchar(1) NOT NULL;
+ALTER TABLE BoxPosition CHANGE COLUMN targetType targetType varchar(50) NOT NULL;
 ALTER TABLE BoxPosition CHANGE COLUMN position position varchar(3) NOT NULL;
 ALTER TABLE BoxPosition DROP PRIMARY KEY;
 ALTER TABLE BoxPosition ADD CONSTRAINT box_postion_pk PRIMARY KEY(boxId, targetId, targetType);
