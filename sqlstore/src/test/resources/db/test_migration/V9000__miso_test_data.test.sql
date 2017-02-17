@@ -1,3 +1,9 @@
+-- Fix skipped constraint and column drop done in NoTest migration
+ALTER TABLE BoxPosition DROP CONSTRAINT "CONSTRAINT_185EA";
+ALTER TABLE BoxPosition DROP COLUMN `row`;
+ALTER TABLE BoxPosition DROP COLUMN `column`;
+ALTER TABLE BoxPosition DROP COLUMN `boxPositionId`;
+
 DELETE FROM Indices;
 DELETE FROM IndexFamily;
 INSERT INTO IndexFamily(indexFamilyId, platformType, name) VALUES
@@ -476,8 +482,9 @@ VALUES
 DELETE FROM BoxPosition;
 INSERT INTO `BoxPosition` (`boxId`, `position`, `targetType`, `targetId`)
 VALUES
-('1', 'B02', 'Sample', 1),
-('2', 'A02', 'Sample', 2);
+(1, 'B02', 'SampleTissue', 16),
+(1, 'A01', 'SampleIdentity', 15),
+(2, 'A02', 'Sample', 2);
 
 DELETE FROM Submission;
 INSERT INTO `Submission` (`submissionId`, `creationDate`, `submittedDate`, `verified`, `description`, `name`, `title`, `accession`, `alias`, `completed`)
