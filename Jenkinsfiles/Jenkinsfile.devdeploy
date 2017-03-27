@@ -1,0 +1,22 @@
+#!groovy
+
+pipeline {
+    agent any
+    stages {
+        stage('Copy prod db to dev db') {
+            steps {
+                sh '(cd ..; if [ -d miso-lims-oicr ]; then (cd miso-lims-oicr && git pull); else git clone git://git.oicr.on.ca/spb/miso-lims-oicr.git; fi )'
+                sh '../miso-lims-oicr/release/miso-restore-to-dev.bash prod'
+            }
+        }
+        stage('Deploy MISO to dev') {
+            steps {
+                sh '''
+                  MISO_VERSION=$(xmlstarlet sel -t -v /_:project/_:version pom.xml)
+                  echo "MISO_VERSION = ${MISO_VERSION}"
+                  MISO_VERSION=${MISO_VERSION} ../miso-lims-oicr/release/web-snapshot.sh debian@miso-dev.gsi.oicr.on.ca
+                '''
+            }
+        }
+    }
+}
